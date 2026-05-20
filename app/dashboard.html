@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Sale Premium Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(20, 20, 20, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: linear-gradient(135deg, #ff3b30, #ff9500);
+            --accent-glow: rgba(255, 59, 48, 0.4);
+            --text-main: #f5f5f7;
+            --text-muted: #86868b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            background: var(--accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.8s ease both;
+        }
+        
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #ff9500;
+        }
+
+        button {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            margin-top: auto;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(255, 59, 48, 0.6);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 15px;
+            height: 250px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .msg-user {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .msg-bot {
+            background: var(--accent);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--card-bg);
+            border-left: 4px solid #ff3b30;
+            padding: 16px 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            animation: slideIn 0.4s ease forwards, fadeOut 0.4s ease 3s forwards;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .toast.success { border-left-color: #34c759; }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateX(50px); } }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toast-container"></div>
+    
+    <h1>⚡ Flash Sale Hub</h1>
+    
+    <div class="container">
+        <!-- Admin Section -->
+        <div class="card">
+            <h2>Admin: Initialize Stock</h2>
+            <div class="form-group">
+                <label>Product ID</label>
+                <input type="text" id="admin-product" value="flash_ps5_001">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" id="admin-qty" value="10">
+            </div>
+            <button onclick="setStock()">Set Inventory</button>
+        </div>
+
+        <!-- Flash Sale Section -->
+        <div class="card">
+            <h2>Live Flash Sale</h2>
+            <div class="form-group">
+                <label>Product ID</label>
+                <input type="text" id="buy-product" value="flash_ps5_001">
+            </div>
+            <div class="form-group">
+                <label>User ID (Auto-generated)</label>
+                <input type="text" id="buy-user" readonly>
+            </div>
+            <button onclick="buyNow()">🔥 Buy Now</button>
+        </div>
+
+        <!-- Support Bot Section -->
+        <div class="card">
+            <h2>GenAI Support</h2>
+            <div class="chat-box" id="chat-box">
+                <div class="message msg-bot">Hi! I'm the Flash Sale Assistant. Ask me about warranties, shipping, cart expiration, or returns!</div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="text" id="chat-input" placeholder="Type your question..." style="flex-grow: 1;" onkeypress="handleChat(event)">
+                <button onclick="sendMessage()" style="padding: 12px; margin-top: 0;">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('buy-user').value = 'user_' + Math.floor(Math.random() * 10000);
+
+        function showToast(message, isSuccess = false) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${isSuccess ? 'success' : ''}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+
+        async function setStock() {
+            const pid = document.getElementById('admin-product').value;
+            const qty = document.getElementById('admin-qty').value;
+            try {
+                const res = await fetch(`/set_stock/${pid}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quantity: parseInt(qty) })
+                });
+                const data = await res.json();
+                if (res.ok) showToast(`Success: ${qty} units of ${pid} added!`, true);
+                else showToast(data.detail || "Error setting stock");
+            } catch (e) { showToast("Connection Error!"); }
+        }
+
+        async function buyNow() {
+            const pid = document.getElementById('buy-product').value;
+            const uid = document.getElementById('buy-user').value;
+            try {
+                const res = await fetch(`/purchase/${pid}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: uid, quantity: 1 })
+                });
+                const data = await res.json();
+                if (res.ok) showToast(`Purchase successful! Remaining stock: ${data.remaining_stock}`, true);
+                else showToast(`Failed: ${data.detail || "Error"}`);
+            } catch (e) { showToast("Connection Error!"); }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="message msg-user">${msg}</div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const res = await fetch(`/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: msg })
+                });
+                const data = await res.json();
+                chatBox.innerHTML += `<div class="message msg-bot">${data.answer || "Sorry, I couldn't process that."}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (e) {
+                chatBox.innerHTML += `<div class="message msg-bot">Connection Error!</div>`;
+            }
+        }
+
+        function handleChat(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+    </script>
+</body>
+</html>
