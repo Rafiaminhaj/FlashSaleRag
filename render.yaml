@@ -2,12 +2,14 @@ services:
   # Backend API Deployment (FastAPI)
   - type: web
     name: flashsale-backend
-    env: docker
-    dockerfilePath: ./Dockerfile
-    plan: free
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: OPENAI_API_KEY
         sync: false # Set this in the Render Dashboard
+      - key: PYTHON_VERSION
+        value: 3.11.4
 
   # Frontend Dashboard Deployment (React + Vite)
   - type: web
@@ -15,6 +17,9 @@ services:
     env: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/dist
+    envVars:
+      - key: NODE_VERSION
+        value: 20
     routes:
       - type: rewrite
         source: /*
