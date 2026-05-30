@@ -3,3 +3,7 @@ uvicorn
 pydantic
 openai
 requests
+langchain-core
+langchain-openai
+langchain-community
+faiss-cpuredis
