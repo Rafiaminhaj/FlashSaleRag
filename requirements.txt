@@ -6,4 +6,5 @@ requests
 langchain-core
 langchain-openai
 langchain-community
-faiss-cpuredis
+faiss-cpu
+redis
