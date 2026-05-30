@@ -13,6 +13,16 @@
 
 An enterprise-grade, cloud-native microservice architecture designed to handle unpredictable traffic bursts (100x traffic spikes) during e-commerce flash sales. The system integrates advanced rate-limiting, dynamic algorithmic surge pricing, event-driven AI workflow automation, and a resilient GenAI customer concierge with RAG-based graceful fallback execution.
 
+## 🌟 Live Demo & API
+
+*   **Frontend (Chaos Engineering Command Center)**: [Live Dashboard](https://flashsale-frontend.onrender.com)
+*   **Backend (Core API & AI Engine)**: [Live Swagger API](https://flashsale-backend-mubx.onrender.com/docs)
+
+> [!NOTE]
+> **Note for Judges**: This project strictly follows a **Decoupled Microservice Architecture**. 
+> * The **Backend API** handles the actual real-time processing (Redis Token-Bucket Rate Limiter, Atomic Lua Scripts for Inventory, FAISS Vector DB, and LangChain AI Agents). You can test the endpoints live via the Swagger UI.
+> * The **Frontend Dashboard** acts as an interactive "Chaos Engineering Visualization Center". Because browsers cannot naturally simulate 10,000+ RPS without being blocked, the frontend visually simulates a massive traffic spike (Chaos Engineering) to demonstrate how the backend architecture (Load Balancer -> Bot Mitigation -> Auto-Scaling) reacts to extreme load.
+
 ## 🚀 Key Features
 
 *   **⚡ Ultra-Concurrent Processing**: Engineered to handle massive traffic spikes typical in flash sales without degrading performance.
